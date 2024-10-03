@@ -1,0 +1,79 @@
+<!DOCTYPE html> 
+  <html>
+    <head>
+	<script src="go.js"></script>
+	<script id="code">
+		function init() {
+		  var $ = go.GraphObject.make;  
+	  
+		  var myDiagram =
+			$(go.Diagram, "myDiagramDiv",  
+			  { 
+				
+				"undoManager.isEnabled": true
+			  });
+	  
+		  // define Diagram template
+		  myDiagram.nodeTemplate =
+			$(go.Node, "Auto",
+			  $(go.Shape, "RoundedRectangle", { stroke: "white", strokeWidth: 5, fill: "lightblue" }),
+			  //$(go.RowColumnDefinition, { row: 2, separatorStrokeWidth: 1.5, separatorStroke: "black" }),
+			  $(go.Panel, "Table",
+				{ margin: 8 },
+				$(go.RowColumnDefinition, { row: 1, separatorStrokeWidth: 1, separatorStroke: "gray" }),
+				$(go.RowColumnDefinition, { row: 2, separatorStrokeWidth: 1, separatorStroke: "gray" }),
+				$(go.RowColumnDefinition, { row: 3, separatorStrokeWidth: 1, separatorStroke: "gray" }),
+				$(go.TextBlock, "vNet: ", { row: 0, alignment: go.Spot.Left, column: 0, margin: 5 }),
+				$(go.TextBlock, "vNet Space: ", { row: 2, alignment: go.Spot.Left, column: 0, margin: 5 }),
+				$(go.TextBlock, "Subnets: ", { row: 3, alignment: go.Spot.Left, column: 0, margin: 5 }),
+				$(go.TextBlock, {row: 0, column: 1, alignment: go.Spot.Left, margin: 5, maxSize: new go.Size(160, NaN)}, new go.Binding("text", "name")),
+				$(go.TextBlock, {row: 1, column: 0, columnSpan: 2, alignment: go.Spot.Left, margin: 5, maxSize: new go.Size(160, NaN)}, new go.Binding("text", "info")),
+				$(go.TextBlock, {row: 2, column: 1, alignment: go.Spot.Left, margin: 5, maxSize: new go.Size(160, NaN)}, new go.Binding("text", "Address")),
+				$(go.TextBlock, {row: 4, column: 0, columnSpan: 2, alignment: go.Spot.Left, margin: 5, maxSize: new go.Size(160, NaN)}, new go.Binding("text", "Subnets"))
+              )
+			);
+			myDiagram.groupTemplate =
+			$(go.Group, "Vertical",
+				$(go.Panel, "Auto",
+					$(go.Shape, "RoundedRectangle", { parameter1: 14, fill: "white",stroke: "white", strokeWidth: 0, }),
+					$(go.Placeholder, { padding: 10 })
+				),
+			);
+			myDiagram.linkTemplate=
+        	$(go.Link,  // the whole link panel
+				$(go.Shape,  // the link shape
+					{ isPanelMain: true,
+					stroke: "black",
+					strokeWidth: 1,
+					margin: -10
+				}),
+		 	);
+		  // define Diagram data
+		  myDiagram.model = new go.GraphLinksModel(
+		  [
+
+{ key: "234a5dec-4aaf-464a-917c-1bf1d41f745d", isGroup: true }, { key: "/subscriptions/e3a0edf1-e4d2-4526-a57d-6d3d6931ee01/resourceGroups/rg-net-shared/providers/Microsoft.Network/virtualNetworks/vnet-demo-shared-001", group: "234a5dec-4aaf-464a-917c-1bf1d41f745d", name: "vnet-demo-shared-001", Address : "172.16.0.0/23", Subnets : "AzureFirewallSubnet 172.16.0.128/26\nGatewaySubnet 172.16.0.64/27\nAzureBastionSubnet 172.16.0.0/27\nsnet-agw-shared-001 172.16.0.96/27\nsnet-dmz-shared-001 172.16.1.0/25\nsnet-app-shared-001 172.16.1.128/25\nsnet-management-shared-001 172.16.0.192/26\nsnet-adds-shared-001 172.16.0.32/27", info: "demo-shared\nrg-net-shared"}, 
+{ key: "392ea596-d591-4b09-be25-f86f249decf1", isGroup: true }, { key: "/subscriptions/ef29faac-7b1b-4f0b-bd35-dc2bd0737782/resourceGroups/rg-net-prod/providers/Microsoft.Network/virtualNetworks/vnet-demo-prod-001", group: "392ea596-d591-4b09-be25-f86f249decf1", name: "vnet-demo-prod-001", Address : "172.16.16.0/21", Subnets : "AzureBastionSubnet 172.16.16.0/27\nsnet-app-prod-001 172.16.18.0/23", info: "demo-production\nrg-net-prod"}, 
+{ key: "0edfeecd-d860-4954-bc7a-8261b197517f", isGroup: true }, { key: "/subscriptions/990df110-0da8-485c-a9a2-6d1721aa501e/resourceGroups/rg-net-test/providers/Microsoft.Network/virtualNetworks/vnet-demo-test-001", group: "0edfeecd-d860-4954-bc7a-8261b197517f", name: "vnet-demo-test-001", Address : "172.16.8.0/23", Subnets : "AzureBastionSubnet 172.16.8.0/27\nsnet-app-test-001 172.16.8.128/25", info: "demo-test\nrg-net-test"}, 
+{ key: "f863862d-4916-468f-aae2-adc44ceec132", isGroup: true }, { key: "/subscriptions/4db5e3d9-13df-4c89-bce8-16d6e4afcb64/resourceGroups/rg-net-acc/providers/Microsoft.Network/virtualNetworks/vnet-demo-acc-001", group: "f863862d-4916-468f-aae2-adc44ceec132", name: "vnet-demo-acc-001", Address : "172.16.12.0/23", Subnets : "AzureBastionSubnet 172.16.12.0/27\nsnet-app-acc-001 172.16.12.128/25", info: "demo-acceptance\nrg-net-acc"}, 
+{ key: "3b354dcb-4942-4495-abbf-1badd60f5ba5", isGroup: true }, { key: "/subscriptions/b75ba572-6650-46f5-a2d3-11ca291d471f/resourceGroups/rg-net-dev/providers/Microsoft.Network/virtualNetworks/vnet-demo-dev-001", group: "3b354dcb-4942-4495-abbf-1badd60f5ba5", name: "vnet-demo-dev-001", Address : "172.16.4.0/23", Subnets : "AzureBastionSubnet 172.16.4.0/27\nsnet-app-dev-001 172.16.4.128/25", info: "demo-development\nrg-net-dev"}, 
+],
+[
+
+{ from: "/subscriptions/e3a0edf1-e4d2-4526-a57d-6d3d6931ee01/resourceGroups/rg-net-shared/providers/Microsoft.Network/virtualNetworks/vnet-demo-shared-001", to: "/subscriptions/990df110-0da8-485c-a9a2-6d1721aa501e/resourceGroups/rg-net-test/providers/Microsoft.Network/virtualNetworks/vnet-demo-test-001" },
+{ from: "/subscriptions/e3a0edf1-e4d2-4526-a57d-6d3d6931ee01/resourceGroups/rg-net-shared/providers/Microsoft.Network/virtualNetworks/vnet-demo-shared-001", to: "/subscriptions/ef29faac-7b1b-4f0b-bd35-dc2bd0737782/resourceGroups/rg-net-prod/providers/Microsoft.Network/virtualNetworks/vnet-demo-prod-001" },
+{ from: "/subscriptions/e3a0edf1-e4d2-4526-a57d-6d3d6931ee01/resourceGroups/rg-net-shared/providers/Microsoft.Network/virtualNetworks/vnet-demo-shared-001", to: "/subscriptions/4db5e3d9-13df-4c89-bce8-16d6e4afcb64/resourceGroups/rg-net-acc/providers/Microsoft.Network/virtualNetworks/vnet-demo-acc-001" },
+{ from: "/subscriptions/e3a0edf1-e4d2-4526-a57d-6d3d6931ee01/resourceGroups/rg-net-shared/providers/Microsoft.Network/virtualNetworks/vnet-demo-shared-001", to: "/subscriptions/b75ba572-6650-46f5-a2d3-11ca291d471f/resourceGroups/rg-net-dev/providers/Microsoft.Network/virtualNetworks/vnet-demo-dev-001" },
+{ from: "/subscriptions/ef29faac-7b1b-4f0b-bd35-dc2bd0737782/resourceGroups/rg-net-prod/providers/Microsoft.Network/virtualNetworks/vnet-demo-prod-001", to: "/subscriptions/e3a0edf1-e4d2-4526-a57d-6d3d6931ee01/resourceGroups/rg-net-shared/providers/Microsoft.Network/virtualNetworks/vnet-demo-shared-001" },
+{ from: "/subscriptions/990df110-0da8-485c-a9a2-6d1721aa501e/resourceGroups/rg-net-test/providers/Microsoft.Network/virtualNetworks/vnet-demo-test-001", to: "/subscriptions/e3a0edf1-e4d2-4526-a57d-6d3d6931ee01/resourceGroups/rg-net-shared/providers/Microsoft.Network/virtualNetworks/vnet-demo-shared-001" },
+{ from: "/subscriptions/4db5e3d9-13df-4c89-bce8-16d6e4afcb64/resourceGroups/rg-net-acc/providers/Microsoft.Network/virtualNetworks/vnet-demo-acc-001", to: "/subscriptions/e3a0edf1-e4d2-4526-a57d-6d3d6931ee01/resourceGroups/rg-net-shared/providers/Microsoft.Network/virtualNetworks/vnet-demo-shared-001" },
+{ from: "/subscriptions/b75ba572-6650-46f5-a2d3-11ca291d471f/resourceGroups/rg-net-dev/providers/Microsoft.Network/virtualNetworks/vnet-demo-dev-001", to: "/subscriptions/e3a0edf1-e4d2-4526-a57d-6d3d6931ee01/resourceGroups/rg-net-shared/providers/Microsoft.Network/virtualNetworks/vnet-demo-shared-001" },
+]);
+}
+</script>
+</head>
+<body  onload="init()"></body>
+<div id="myDiagramDiv" style="border: solid 1px; min-width:800px; min-height:800px">
+</div>
+</body>
+</html>
